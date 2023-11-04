@@ -8,6 +8,7 @@ public class Main2 {
         Thread thread = new Thread(new LongComputationTask(new BigInteger("200000"), new BigInteger("100000000")));
 
         thread.start();
+        thread.interrupt();
     }
 
     private static class LongComputationTask implements Runnable {
@@ -28,6 +29,10 @@ public class Main2 {
             BigInteger result = BigInteger.ONE;
 
             for (BigInteger i = BigInteger.ZERO; i.compareTo(power) != 0; i = i.add(BigInteger.ONE)) {
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("Prematurely interrupted computation");
+                    return BigInteger.ZERO;
+                }
                 result = result.multiply(base);
             }
 
