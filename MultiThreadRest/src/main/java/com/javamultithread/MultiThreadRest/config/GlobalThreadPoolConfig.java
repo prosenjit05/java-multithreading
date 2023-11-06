@@ -11,8 +11,8 @@ public class GlobalThreadPoolConfig {
     @Bean
     public TaskExecutor globalTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(200); // Set the desired number of threads
-        executor.setMaxPoolSize(400); // Set the maximum number of threads
+        executor.setCorePoolSize(50); // Set the desired number of threads
+        executor.setMaxPoolSize(100); // Set the maximum number of threads
         executor.setQueueCapacity(0); // Set the queue capacity
         executor.initialize();
         return executor;

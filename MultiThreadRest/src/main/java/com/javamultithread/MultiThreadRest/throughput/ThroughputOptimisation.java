@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @RestController
+@EnableAsync
 public class ThroughputOptimisation {
 
     private static final String INPUT_FILE = "./src/main/resources/war_and_peace.txt";
@@ -36,7 +39,7 @@ public class ThroughputOptimisation {
     //http://localhost:8000/search?word=afraid
 
     @GetMapping("/search")
-    public ResponseEntity<String> getBookById(@RequestParam String word) throws InterruptedException, IOException, ExecutionException {
+    public ResponseEntity<String> search(@RequestParam String word) throws InterruptedException, IOException, ExecutionException {
         CompletableFuture<Long> futureResult = new CompletableFuture<>();
 
         globalTaskExecutor.execute(() -> {
@@ -63,6 +66,25 @@ public class ThroughputOptimisation {
             }
         }
         return count;
+    }
+
+    @GetMapping("/search1")
+    public ResponseEntity<String> search1(@RequestParam String word) throws IOException {
+
+        text = new String(Files.readAllBytes(Paths.get(INPUT_FILE)));
+        Long count = countWord(word);
+
+        return new ResponseEntity<>(count.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search2")
+    @Async
+    public ResponseEntity<String> search2(@RequestParam String word) throws IOException {
+
+        text = new String(Files.readAllBytes(Paths.get(INPUT_FILE)));
+        Long count = countWord(word);
+
+        return new ResponseEntity<>(count.toString(), HttpStatus.OK);
     }
 
 }
