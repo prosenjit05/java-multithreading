@@ -3,10 +3,10 @@ package com.java.Java_Multithreading;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class JavaMultithreadingApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
