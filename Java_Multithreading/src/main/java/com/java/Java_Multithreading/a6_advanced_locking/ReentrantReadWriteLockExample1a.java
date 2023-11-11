@@ -1,7 +1,9 @@
 package com.java.Java_Multithreading.a6_advanced_locking;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ReentrantReadWriteLockExample1a {
     public static final int HIGHEST_PRICE = 1000;
@@ -60,10 +62,13 @@ public class ReentrantReadWriteLockExample1a {
 
     public static class InventoryDatabase {
         private TreeMap<Integer, Integer> priceToCountMap = new TreeMap<>();
-        private ReentrantLock lock = new ReentrantLock();
+        private ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        private Lock readLock = reentrantReadWriteLock.readLock();
+        private Lock writeLock = reentrantReadWriteLock.writeLock();
+        private Lock lock = new ReentrantLock();
 
         public int getNumberOfItemsInPriceRange(int lowerBound, int upperBound) {
-            lock.lock();
+            readLock.lock();
             try {
                 Integer fromKey = priceToCountMap.ceilingKey(lowerBound);
                 Integer toKey = priceToCountMap.floorKey(upperBound);
@@ -81,12 +86,12 @@ public class ReentrantReadWriteLockExample1a {
 
                 return sum;
             } finally {
-                lock.unlock();
+                readLock.unlock();
             }
         }
 
         public void addItem(int price) {
-            lock.lock();
+            writeLock.lock();
             try {
                 Integer numberOfItemsForPrice = priceToCountMap.get(price);
                 if (numberOfItemsForPrice == null) {
@@ -95,12 +100,12 @@ public class ReentrantReadWriteLockExample1a {
                     priceToCountMap.put(price, numberOfItemsForPrice + 1);
                 }
             } finally {
-                lock.unlock();
+                writeLock.unlock();
             }
         }
 
         public void removeItem(int price) {
-            lock.lock();
+            writeLock.lock();
             try {
                 Integer numberOfItemsForPrice = priceToCountMap.get(price);
                 if (numberOfItemsForPrice == null || numberOfItemsForPrice == 1) {
@@ -109,7 +114,7 @@ public class ReentrantReadWriteLockExample1a {
                     priceToCountMap.put(price, numberOfItemsForPrice - 1);
                 }
             } finally {
-                lock.unlock();
+                writeLock.unlock();
             }
         }
     }
