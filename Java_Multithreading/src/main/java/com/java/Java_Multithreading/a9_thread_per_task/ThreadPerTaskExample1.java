@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThreadPerTaskExample1 {
-    private static final int NUMBER_OF_TASKS = 1000;
+    private static final int NUMBER_OF_TASKS = 100_000;
 
     public static void main(String[] args) {
         System.out.printf("Running %d tasks\n", NUMBER_OF_TASKS);
