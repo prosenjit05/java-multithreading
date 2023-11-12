@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VirtualThreadExample1b {
-    private static final int NUMBER_OF_VIRTUAL_THREADS = 2;
+    private static final int NUMBER_OF_VIRTUAL_THREADS = 1000;
 
     public static void main(String[] args) throws InterruptedException {
         Runnable runnable = () -> System.out.println("Inside thread: " + Thread.currentThread());
